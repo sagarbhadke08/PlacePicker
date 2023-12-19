@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
@@ -13,19 +13,34 @@ function App() {
   const [pickedPlaces, setPickedPlaces] = useState([]);
   const [availablePlaces, setAvailablePlaces] = useState([]);
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const sortedPlaces = sortPlacesByDistance(
+        AVAILABLE_PLACES,
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      setAvailablePlaces(sortedPlaces);
+    });
+
+  });
 
   // navigator.geolocation.getCurrentPosition(()=>{}); //? built in method which is provided by the browwser which is available globally.
   //* callback funtion-> and takes the input as the function --> This anonymous arrow function wwwhich will be exe by the browwwser
-  navigator.geolocation.getCurrentPosition((position) => {
-    const sortedPlaces = sortPlacesByDistance(
-      AVAILABLE_PLACES,
-      position.coords.latitude,
-      position.coords.longitude
-    );
-  });
+  // navigator.geolocation.getCurrentPosition((position) => {
+  //   const sortedPlaces = sortPlacesByDistance(
+  //     AVAILABLE_PLACES,
+  //     position.coords.latitude,
+  //     position.coords.longitude
+  //   );
+  // });
 
-  modal.current.open();
-  selectedPlace.current = id;
+  function handleStartRemovePlace(id) {
+    modal.current.open();
+    selectedPlace.current = id;
+  }
+
 
 
   function handleStopRemovePlace() {
@@ -77,6 +92,7 @@ function App() {
           title="Available Places"
           // places={AVAILABLEa_PLACES}
           places={availablePlaces}
+          fallbackText="Sorting places by distance..."
           onSelectPlace={handleSelectPlace}
         />
       </main>
