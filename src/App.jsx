@@ -5,16 +5,28 @@ import { AVAILABLE_PLACES } from './data.js';
 import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
+import { sortPlacesByDistance } from './loc.js';
 
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [availablePlaces, setAvailablePlaces] = useState([]);
 
-  function handleStartRemovePlace(id) {
-    modal.current.open();
-    selectedPlace.current = id;
-  }
+
+  // navigator.geolocation.getCurrentPosition(()=>{}); //? built in method which is provided by the browwser which is available globally.
+  //* callback funtion-> and takes the input as the function --> This anonymous arrow function wwwhich will be exe by the browwwser
+  navigator.geolocation.getCurrentPosition((position) => {
+    const sortedPlaces = sortPlacesByDistance(
+      AVAILABLE_PLACES,
+      position.coords.latitude,
+      position.coords.longitude
+    );
+  });
+
+  modal.current.open();
+  selectedPlace.current = id;
+
 
   function handleStopRemovePlace() {
     modal.current.close();
@@ -63,7 +75,8 @@ function App() {
         />
         <Places
           title="Available Places"
-          places={AVAILABLE_PLACES}
+          // places={AVAILABLEa_PLACES}
+          places={availablePlaces}
           onSelectPlace={handleSelectPlace}
         />
       </main>
