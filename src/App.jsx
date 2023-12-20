@@ -56,7 +56,7 @@ function App() {
 
   function handleStartRemovePlace(id) {
     // modal.current.open();
-   setModalIsOpen(true);
+    setModalIsOpen(true);
     selectedPlace.current = id;
   }
 
