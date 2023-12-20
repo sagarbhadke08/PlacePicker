@@ -1,10 +1,27 @@
+import { useEffect } from "react";
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
 
-  setTimeout(() => {
+  useEffect(() => {
+    console.log('TImer Set');
+    const timer = setTimeout(() => {
+      //* this code is nothing but a side effect bcz it is not related to the outputting this jsx code
+      //* so moving it into the useEffect
+      onConfirm();
 
-    onConfirm();
+    }, 3000);
 
-  }, 3000)
+    return () => {
+     // console.log('cleaning timer');
+      clearTimeout(timer);
+    }
+  }, [onConfirm]);
+
+  // setTimeout(() => {
+  //   //* this code is nothing but a side effect bcz it is not related to the outputting this jsx code
+  //   //* so moving it into the useEffect
+  //   onConfirm();
+
+  // }, 3000)
 
   return (
     <div id="delete-confirmation">
