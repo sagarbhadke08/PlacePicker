@@ -7,11 +7,14 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
   const [remainingTime, setRemainingTime] = useState(TIMER);
 
 
+  useEffect(() => {
 
-  setInterval(() => {
+    setInterval(() => {
+      console.log('INTERVAL');
+      setRemainingTime(prevTime => prevTime - 10);
+    }, 10);
 
-    setRemainingTime(prevTime => prevTime - 10);
-  }, 10);
+  }, [])
 
   useEffect(() => {
     console.log('TImer Set');
