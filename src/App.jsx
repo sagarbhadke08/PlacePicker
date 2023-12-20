@@ -7,11 +7,29 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import { sortPlacesByDistance } from './loc.js';
 
+
+const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+const storedPlaces = storedIds.map(id =>
+  AVAILABLE_PLACES.find((place) => place.id === id)
+);
+
+
+
 function App() {
-  const modal = useRef();
+
+
+
+
   const selectedPlace = useRef();
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
   const [availablePlaces, setAvailablePlaces] = useState([]);
+
+
+
+
+
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -37,14 +55,16 @@ function App() {
   // });
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    // modal.current.open();
+   setModalIsOpen(true);
     selectedPlace.current = id;
   }
 
 
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    // modal.current.close();
+    setModalIsOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -55,18 +75,39 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+
+
+    //* storing the data into the broser storage.
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || []; //* added fallback code which produces an empty array
+
+    if (storedIds.indexOf(id) === -1) {
+      localStorage.setItem(
+        'selectedPlaces',
+        JSON.stringify([id, ...storedIds])
+      );
+    }
+
+
+
   }
 
   function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    // modal.current.close();
+    setModalIsOpen(false);
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || []; //* added fallback code which produces an empty array
+    localStorage.setItem(
+      'selectedPlaces',
+      JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current))
+    );
   }
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={modalIsOpen}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
