@@ -12,7 +12,7 @@ function Modal({ open, children }) {
       dialog.current.close();
     }
 
-  }, []);
+  }, [open]);
 
 
   return createPortal(
