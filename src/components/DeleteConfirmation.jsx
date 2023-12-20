@@ -9,11 +9,14 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
 
   useEffect(() => {
 
-    setInterval(() => {
+ const interval=   setInterval(() => {
       console.log('INTERVAL');
       setRemainingTime(prevTime => prevTime - 10);
     }, 10);
 
+    return ()=>{
+        clearInterval(interval);
+    }//* This is called the clean up function to avoid the infinite loop
   }, [])
 
   useEffect(() => {
