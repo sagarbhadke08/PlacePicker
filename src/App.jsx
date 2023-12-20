@@ -56,7 +56,7 @@ function App() {
 
   function handleStartRemovePlace(id) {
     // modal.current.open();
-   setModalIsOpen(true);
+    setModalIsOpen(true);
     selectedPlace.current = id;
   }
 
@@ -107,7 +107,7 @@ function App() {
 
   return (
     <>
-      <Modal open={modalIsOpen}>
+      <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
